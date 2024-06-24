@@ -27,7 +27,7 @@ app.get("/docs", (req, res) => {
   res.sendFile(__dirname + "/views/docs.html");
 });
 
-app.use("/api/cohort", require("./Rou/cohort.routes.js"));
+app.use("/api/cohort", require("./routes/cohort.routes.js"));
 // START SERVER
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);
