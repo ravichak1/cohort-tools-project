@@ -1,17 +1,28 @@
 const router = require("express").Router();
 
-const cohortJSON = require("../cohorts.json");
+const Cohort = require("./../models/Cohort.models");
 
-router.get("/", (req, res, next) => {
-  res.json(cohortJSON);
+router.get("/", (req, res) => {
+  Cohort.find({})
+    .then((cohorts) => {
+      console.log("Retrieved cohorts ->", cohorts);
+      res.json(cohorts);
+    })
+    .catch((error) => {
+      console.error("Error while retrieving cohorts ->", error);
+      res.status(500).json({ error: "Failed to retrieve cohorts" });
+    });
 });
 
-router.get("/:id", (req, res, next) => {
-  console.log(req.params);
-  const { id } = req.params;
-
-  const findId = cohortJSON.find((each) => each._id === Number(id));
-  res.json(findId);
+router.get("/:id", (req, res) => {
+  Cohort.findById(req.params.id)
+    .then((cohorts) => {
+      console.log("Retrieved cohorts ->", cohorts);
+      res.json(cohorts);
+    })
+    .catch((error) => {
+      console.error("Error while retrieving cohorts ->", error);
+      res.status(500).json({ error: "Failed to retrieve cohorts" });
+    });
 });
-
 module.exports = router;
