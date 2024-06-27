@@ -63,17 +63,11 @@ router.post("/", async (req, res) => {
 
 router.get("/cohort/:cohortId", async (req, res) => {
   const { cohortId } = req.params;
-
+  const studenCohort = await Student.find({ cohort: cohortId }).populate(
+    "cohort"
+  );
+  res.json(studenCohort);
   try {
-    const cohortExists = await Cohort.findById(cohortId);
-    if (!cohortExists) {
-      return res.status(404).json({ error: "Cohort not found" });
-    }
-
-    const students = await Student.find({ cohort: cohortId }).populate(
-      "cohort"
-    );
-    res.json({ cohortId, students });
   } catch (error) {
     console.error("Error while retrieving students ->", error);
     res.status(500).json({ error: "Failed to retrieve students" });
