@@ -25,7 +25,7 @@ const cohortSchema = new Schema(
       type: String,
       enum: [
         "Paris",
-        "Madris",
+        "Madrid",
         "Barcelona",
         "Lisbon",
         "Berlin",

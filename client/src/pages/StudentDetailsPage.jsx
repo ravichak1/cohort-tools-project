@@ -57,9 +57,9 @@ function StudentDetailsPage() {
               <p className="text-left mb-2 border-b pb-2">
                 <strong>LinkedIn:</strong> {student.linkedinUrl}
               </p>
-              {/* <p className="text-left mb-2 border-b pb-2">
+              <p className="text-left mb-2 border-b pb-2">
                 <strong>Languages:</strong> {student.languages.join(", ")}
-              </p> */}
+              </p>
               <p className="text-left mb-2 border-b pb-2">
                 <strong>Program:</strong> {student.program}
               </p>
