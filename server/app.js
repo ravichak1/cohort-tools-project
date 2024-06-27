@@ -34,7 +34,19 @@ app.get("/docs", (req, res) => {
 app.use("/api/cohorts", require("./Rou/cohort.routes.js"));
 
 app.use("/api/students", require("./Rou/students.routes.js"));
+
+// Import the custom error handling middleware:
+const {
+  errorHandler,
+  notFoundHandler,
+} = require("./middleware/error-handling");
+
+// Set up custom error handling middleware:
+app.use(notFoundHandler);
+app.use(errorHandler);
+
 // START SERVER
+
 app.listen(PORT, () => {
   console.log(`Server listening on port http://localhost:${PORT}`);
 });

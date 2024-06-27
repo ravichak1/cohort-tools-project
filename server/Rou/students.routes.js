@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const Student = require("./../models/Student.model");
 const Cohort = require("./../models/Cohort.models");
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
   Student.find({})
     .populate("cohort")
     .then((students) => {
@@ -12,20 +12,22 @@ router.get("/", (req, res) => {
     .catch((error) => {
       console.error("Error while retrieving students ->", error);
       res.status(500).json({ error: "Failed to retrieve students" });
+      next(error);
     });
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   const eachStudent = await Student.findOne({ _id: id }).populate("cohort");
   res.json(eachStudent);
   try {
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   const {
     firstName,
     lastName,
@@ -58,10 +60,11 @@ router.post("/", async (req, res) => {
     console.log("hello");
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
 
-router.get("/cohort/:cohortId", async (req, res) => {
+router.get("/cohort/:cohortId", async (req, res, next) => {
   const { cohortId } = req.params;
   const studenCohort = await Student.find({ cohort: cohortId }).populate(
     "cohort"
@@ -71,10 +74,11 @@ router.get("/cohort/:cohortId", async (req, res) => {
   } catch (error) {
     console.error("Error while retrieving students ->", error);
     res.status(500).json({ error: "Failed to retrieve students" });
+    next(error);
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const {
       firstName,
@@ -110,10 +114,11 @@ router.put("/:id", async (req, res) => {
   } catch (error) {
     res.status(500);
     console.log(error);
+    next(error);
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     await Student.findByIdAndDelete({ _id: id });
@@ -122,6 +127,7 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     res.status(500);
     console.log(error);
+    next(error);
   }
 });
 module.exports = router;

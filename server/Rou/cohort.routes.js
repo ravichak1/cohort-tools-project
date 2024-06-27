@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const Cohort = require("./../models/Cohort.models");
 
-router.get("/", (req, res) => {
+router.get("/", (req, res, next) => {
   Cohort.find({})
     .then((cohorts) => {
       console.log("Retrieved cohorts ->", cohorts);
@@ -11,20 +11,22 @@ router.get("/", (req, res) => {
     .catch((error) => {
       console.error("Error while retrieving cohorts ->", error);
       res.status(500).json({ error: "Failed to retrieve cohorts" });
+      next(error);
     });
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
   const eachCohort = await Cohort.findOne({ _id: id });
   res.json(eachCohort);
   try {
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   const {
     cohortSlug,
     cohortName,
@@ -59,10 +61,11 @@ router.post("/", async (req, res) => {
   try {
   } catch (error) {
     console.log(error);
+    next(error);
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
@@ -102,10 +105,11 @@ router.put("/:id", async (req, res) => {
   } catch (error) {
     res.status(500);
     console.log(error);
+    next(error);
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     await Cohort.findByIdAndDelete({ _id: id });
@@ -114,6 +118,7 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     res.status(500);
     console.log(error);
+    next(error);
   }
 });
 module.exports = router;
