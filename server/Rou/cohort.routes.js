@@ -1,5 +1,5 @@
 const router = require("express").Router();
-
+const isAuth = require("./../middleware/isAuthenticated");
 const Cohort = require("./../models/Cohort.models");
 
 router.get("/", (req, res, next) => {
@@ -15,7 +15,7 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", isAuth, async (req, res, next) => {
   const { id } = req.params;
   const eachCohort = await Cohort.findOne({ _id: id });
   res.json(eachCohort);
@@ -65,7 +65,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", isAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const {
@@ -109,7 +109,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", isAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
     await Cohort.findByIdAndDelete({ _id: id });

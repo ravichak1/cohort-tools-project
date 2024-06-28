@@ -1,5 +1,5 @@
 const router = require("express").Router();
-
+const isAuth = require("./../middleware/isAuthenticated");
 const Student = require("./../models/Student.model");
 const Cohort = require("./../models/Cohort.models");
 router.get("/", (req, res, next) => {
@@ -16,7 +16,7 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", isAuth, async (req, res, next) => {
   const { id } = req.params;
   const eachStudent = await Student.findOne({ _id: id }).populate("cohort");
   res.json(eachStudent);
@@ -64,7 +64,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.get("/cohort/:cohortId", async (req, res, next) => {
+router.get("/cohort/:cohortId", isAuth, async (req, res, next) => {
   const { cohortId } = req.params;
   const studenCohort = await Student.find({ cohort: cohortId }).populate(
     "cohort"
@@ -78,7 +78,7 @@ router.get("/cohort/:cohortId", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", isAuth, async (req, res, next) => {
   try {
     const {
       firstName,
@@ -118,7 +118,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", isAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
     await Student.findByIdAndDelete({ _id: id });
